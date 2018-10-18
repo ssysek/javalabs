@@ -1,9 +1,11 @@
 package labs;
 
-public class COOValue{
-    private int index,value;
-            public COOValue(index, value){
-                this.index=index;
+public class COOValue {
+
+    private int indeks,value;
+
+            public COOValue(int indeks,int value){
+                this.indeks=indeks;
                 this.value=value;
             }
 

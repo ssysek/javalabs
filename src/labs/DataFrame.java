@@ -24,6 +24,32 @@ public class DataFrame {
         return new ArrayList();
     }
 
+    DataFrame get (String[] cols, boolean copy){
+        String [] nowe_typy = new String[cols.length];
+        for (int i=0; i<cols.length; ++i){
+            for (int j=0; j<names.length; ++j){
+                if (cols[i].equals(names[j])){
+                    nowe_typy[i]=types[j];
+                }
+            }
+        }
+
+        DataFrame result = new DataFrame(cols, nowe_typy);
+
+        for (int i=0; i<cols.length; ++i){
+            for (int j=0; j<names.length; ++j){
+                if (cols[i].equals(names[j])){
+                    if (copy){
+                        result.tab.get(j).addAll(tab.get(i));
+                    } else {
+                        result.tab.set(j, tab.get(i));
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
     DataFrame iloc (int i){
         DataFrame result = new DataFrame(names, types);
         for (int j=0; j<names.length; ++j){

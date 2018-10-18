@@ -1,4 +1,4 @@
-package labs;
+/*package labs;
 
 import java.util.ArrayList;
 
@@ -17,17 +17,18 @@ public class SparseDataFrame extends DataFrame {
         for(int i =0; i < df.tab.size();i++){
             for(int j=0;j < df.tab.size();j++){
                 if(df.tab.get(i).get(j)!=hide){
-                    COOValue cooval= new COOValue(j,df.tab.get(i).get(j));
-                    sparse.get(i).add(cooval);
+                    //COOValue cooval= new COOValue(j,df.tab.get(i).get(j));
+                    //sparse.get(i).add(cooval);
                 }
             }
         }
     }
     public DataFrame ToDense(SparseDataFrame sdf){
-        DataFrame DenseDataFrame = new DataFrame(tab.);
+        DataFrame DenseDataFrame = new DataFrame(sdf.names,sdf.types);
         String fill = sdf.hide;
 
-        for(int i=0; i< sdf.size();i++)
+        for(int i=0; i< sdf.size();i++){
+        }
     }
 
-}
+}*/
