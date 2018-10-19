@@ -1,6 +1,7 @@
 package labs;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class DataFrame {
 
@@ -15,7 +16,7 @@ public class DataFrame {
     int size(){
         return tab.get(0).size();
     }
-    ArrayList get(String colanme){
+    Objects get(String colanme){
         for (int i=0; i<names.length; ++i){
             if (colanme.equals(names[i])) {
                 return tab.get(i);
