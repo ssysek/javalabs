@@ -1,22 +1,13 @@
 package labs;
 
-import java.util.ArrayList;
-import java.util.Objects;
+import java.util.Date;
+import java.util.LinkedList;
 
 public class Main {
-
-    public static void main(String[] args) {
-        DataFrame ck = new  DataFrame(new String[]{"kol1","kol2","kol3"},
-                new String[]{"int","double","MyCustomType"});
-
-        ArrayList<ArrayList> test = new ArrayList();
-        test.add(ck.get("kol1"));
-
-        System.out.println("Using for loop");
-        System.out.println("--------------");
-        for (int i = 0; i < test.size(); i++) {
-            System.out.println(test.get(i));
-        }
+    public static void main(String[] argv)throws CustomException{
+        DataFrame testdata = new DataFrame("test.csv",new Class[]{StringHolder.class, FloatHolder.class, FloatHolder.class, FloatHolder.class},true);
+        String[] str = new String[]{"id"};
+        testdata = testdata.groupby(str).std();
+        int k =1;
     }
-
 }

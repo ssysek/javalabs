@@ -3,65 +3,75 @@ package labs;
 import java.util.ArrayList;
 
 public class SparseDataFrame extends DataFrame {
-    public String hide;
-    ArrayList<ArrayList<COOValue>> sparse = new ArrayList<ArrayList<COOValue>>();
+    ArrayList<ArrayList<CooValue>> sparseDataFrame;
+    int numberOfColumns;
+    int sizeOfColumn;
+    String toHide;
 
-
-    public SparseDataFrame(String[] cols, String[] rows, String hide){
-
-        super(cols, rows);
-        this.hide=hide;
+    public SparseDataFrame(String[] namesOfColumns, Class<? extends Value>[] typesOfColumns, String hide ) {
+        super(namesOfColumns, typesOfColumns);
+        numberOfColumns = namesOfColumns.length;
+        names = namesOfColumns;
+        types = typesOfColumns;
+        toHide = hide;
     }
 
-    public SparseDataFrame(DataFrame frame, String hide){
-        super(frame.names,frame.types);
-        this.hide=hide;
+    public SparseDataFrame(DataFrame df, String hide){
+        super(df);
+        numberOfColumns = names.length;
+        sizeOfColumn = df.get(df.names[0]).size();
+        toHide = hide;
+        sparseDataFrame = new ArrayList<>();
 
-        for(int i=0;i<frame.tab.size();i++){
-            for(int k=0;k<frame.tab.get(i).size();k++){
-                if(frame.tab.get(i).get(k)!=hide){
-                    COOValue cooval=new COOValue(k,frame.tab.get(i).get(k));
-                    sparse.get(i).add(cooval);
+        for(int columnIterator=0; columnIterator<numberOfColumns; columnIterator++){
+            ArrayList temp = df.get(names[columnIterator]);
+            sparseDataFrame.add(new ArrayList<>(1));
+            for(int rowIterator=0; rowIterator<temp.size(); rowIterator++){
+                if(!(temp.get(rowIterator).toString()).equals(toHide)){
+                    sparseDataFrame.get(columnIterator).add(new CooValue(rowIterator,(Value)temp.get(rowIterator)));
                 }
             }
         }
-
     }
-    int ArraySize(ArrayList<ArrayList<COOValue>> list){
-        int size=0;
-        for(int i=0;i<list.size();i++){
-            for(int j=0;j<list.get(i).size();i++){
-                if(list.get(i).get(j).COOIndex>size){
-                    size=list.get(i).get(j).COOIndex;
+
+
+    DataFrame toDense()throws CustomException{
+        DataFrame standardDataFrame = new DataFrame(names, types);
+        String[] temp = new String[numberOfColumns];
+
+        for(int rowIterator=0; rowIterator<sizeOfColumn; rowIterator++){
+            int sparseDfRowIterator = 0;
+            for(int columnIterator=0; columnIterator<names.length; columnIterator++){
+                    if (sparseDataFrame.get(columnIterator).get(sparseDfRowIterator).index != rowIterator) {
+                        temp[columnIterator] = toHide;
+                    }
+                    else {
+                        temp[columnIterator] = sparseDataFrame.get(columnIterator).get(rowIterator).content.toString();
+                        sparseDfRowIterator++;
+                    }
+            }
+            standardDataFrame.add(temp);
+        }
+        return standardDataFrame;
+    }
+
+    void add(Value[] values) throws CustomException{
+        if(values.length == numberOfColumns){
+            int rowIterator;
+
+            for(int columnIterator=0; columnIterator<numberOfColumns; columnIterator++){
+                rowIterator=0;
+                while (sparseDataFrame.get(columnIterator).get(rowIterator)!=null){
+                    rowIterator++;
+                }
+                if(!values[columnIterator].toString().equals(toHide)){
+                    sparseDataFrame.get(columnIterator).add(new CooValue(rowIterator,values[columnIterator]));
                 }
             }
+
         }
-        return size;
-    }
-
-
-    public DataFrame todense(SparseDataFrame sframe){
-        DataFrame result=new DataFrame(sframe.names,sframe.types);
-        String tounhide=sframe.hide;
-        ArrayList<ArrayList<Object>> resultvals=new ArrayList();
-
-        int highest=ArraySize(sframe.sparse);
-
-        for(int i=0;i<sframe.names.length;i++){
-            for(int j=0;j<highest;j++){
-                resultvals.get(i).add(tounhide);
-            }
+        else{
+            throw new CustomException("Number of adding objects can't differ from the number of columns");
         }
-
-        for(int i = 0; i<sframe.sparse.size(); i++){
-            for(int j = 0; j<sframe.sparse.get(i).size(); j++){
-                COOValue thiscooval=sframe.sparse.get(i).get(j);
-                resultvals.get(i).set(thiscooval.COOIndex,thiscooval.COOVal);
-
-            }
-        }
-        result.values=resultvals;
-        return result;
-
     }
 }
