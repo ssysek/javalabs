@@ -1,6 +1,7 @@
 package labs;
 
-public interface GroupBy {
+public interface Groupby
+{
     DataFrame max();
     DataFrame min();
     DataFrame mean();

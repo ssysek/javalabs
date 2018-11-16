@@ -1,5 +1,5 @@
 package labs;
 
 public interface Applyable {
-    DataFrame apply(DataFrame dataFrame);
+    DataFrame apply(DataFrame group);
 }
